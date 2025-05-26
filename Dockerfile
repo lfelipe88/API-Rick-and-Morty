@@ -1,5 +1,4 @@
-# Usar una imagen base de Node.js
-FROM node
+FROM node:latest AS build
 
 # Establecer el directorio de trabajo
 WORKDIR /app
@@ -14,10 +13,10 @@ RUN npm install
 RUN npm run build
 
 # Usar una imagen ligera de Nginx para deploy
-FROM nginx
+FROM nginx:latest
 
 # Copiar la carpeta de salida de la aplicación al contenedor de Nginx
-COPY --from=0 /app/dist/api-ricky-morty /usr/share/nginx/html
+COPY --from=build /app/dist/api-ricky-morty /usr/share/nginx/html
 
 # Exponer el puerto 80 para acceder a la aplicación
 EXPOSE 80
